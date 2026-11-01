@@ -1,0 +1,22 @@
+{
+  "athlete": {
+    "weight_current": 80.0,
+    "weight_target": 72.0,
+    "tendon_stiffness_level": 2,
+    "macros_target": { "protein": 170, "calories_deficit": 500 }
+  },
+  "week_focus": {
+    "uni_phase": "Vorlesungszeit (Heavy STEM focus)",
+    "training_phase": "Winter-Block (Hypertrophie & Muscle Memory)"
+  },
+  "mobile_daily_plan": {
+    "day": "Heute",
+    "type": "Gym Full-Body (2-Satz MEV)",
+    "prehab_mandatory": ["Face pulls", "Scapular control (UCS)", "Core activation (APT)"],
+    "exercises": [
+      { "name": "Hack Squat", "sets": 2, "reps": "6-8", "target_weight": 150 },
+      { "name": "Weighted Dips", "sets": 2, "reps": "8-10", "target_weight": 20 },
+      { "name": "Pull-ups", "sets": 2, "reps": "AMRAP", "target_weight": 0 }
+    ]
+  }
+}
