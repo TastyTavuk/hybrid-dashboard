@@ -1,39 +1,24 @@
 {
-  "athlete": {
-    "name": "Sepp",
-    "event_focus": "Frankfurt Marathon & Köln Triathlon",
-    "readiness_score": 78,
-    "readiness_label": "Fresh — push today",
-    "metrics": {
-      "fitness_ctl": 42,
-      "fatigue_atl": 35,
-      "form_tsb": 7
-    }
+  "monat": {
+    "name": "Oktober 2026",
+    "tage_absolviert": 18,
+    "gesamt_tage": 31,
+    "historie": [1,1,1,0,1,1,1,1,0,1,1,1,0,1,1,1,1,0,1,1,1,0,1,1,0,1,0,0,0,0,0]
   },
-  "wochen_kalender": [
-    { "tag": "MO", "datum": "26", "status": "done" },
-    { "tag": "DI", "datum": "27", "status": "active" },
-    { "tag": "MI", "datum": "28", "status": "pending" },
-    { "tag": "DO", "datum": "29", "status": "pending" },
-    { "tag": "FR", "datum": "30", "status": "pending" },
-    { "tag": "SA", "datum": "31", "status": "pending" },
-    { "tag": "SO", "datum": "01", "status": "pending" }
+  "woche": [
+    { "tag": "Mo", "datum": "26", "fokus": "Pull & Z2", "status": "done" },
+    { "tag": "Di", "datum": "27", "fokus": "Intervalle", "status": "active" },
+    { "tag": "Mi", "datum": "28", "fokus": "Push & Core", "status": "pending" },
+    { "tag": "Do", "datum": "29", "fokus": "Langer Lauf", "status": "pending" },
+    { "tag": "Fr", "datum": "30", "fokus": "Rest", "status": "pending" },
+    { "tag": "Sa", "datum": "31", "fokus": "Marathon", "status": "pending" },
+    { "tag": "So", "datum": "01", "fokus": "Recovery", "status": "pending" }
   ],
-  "tagesplan": {
+  "heute": {
     "datum": "Dienstag, 27. Oktober",
-    "morning": {
-      "type": "🏋️ Gym",
-      "title": "Pull & Core",
-      "duration": "45 min",
-      "details": "Details & Tracking in Fitness First App. Fokus auf UCS Prehab."
-    },
-    "evening": {
-      "type": "🚴 Rad",
-      "title": "Sweetspot Intervalle",
-      "duration": "1:15 h",
-      "tss": 75,
-      "zone": "Z4 / Schwelle",
-      "details": "15min Warmup. 4x8min @ 90% FTP. Garmin-Workout ist geladen."
-    }
+    "sessions": [
+      { "id": "s1", "zeit": "Vormittag", "titel": "Gym: Pull & Core", "details": "45 min. Prehab (UCS) nicht vergessen!" },
+      { "id": "s2", "zeit": "Abend", "titel": "Rad: Sweetspot (Z4)", "details": "1:15 h auf der Rolle. 4x8 min Intervalle." }
+    ]
   }
 }
