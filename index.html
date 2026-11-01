@@ -1,86 +1,152 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>
-    <link rel="manifest" href="manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hybrid Command Center</title>
+    <title>Hybrid Ausdauer Coach</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { background-color: #0d1117; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        .card { background-color: #1c212b; border-radius: 16px; border: 1px solid #2d3342; }
+        .text-teal { color: #1fd6a3; }
+        .bg-teal { background-color: #1fd6a3; }
+        
+        /* Bottom Nav */
+        .bottom-nav { background-color: #131720; border-top: 1px solid #2d3342; }
+        .nav-center-btn { width: 56px; height: 56px; background-color: #1fd6a3; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -24px; border: 4px solid #0d1117; box-shadow: 0 4px 12px rgba(31, 214, 163, 0.3); }
+    </style>
 </head>
-<body class="bg-gray-900 text-white p-4 md:p-8 font-sans">
+<body class="pb-24 px-4 pt-8">
 
     <!-- Header -->
-    <header class="flex justify-between items-center border-b border-gray-700 pb-4 mb-6">
-        <h1 class="text-2xl font-bold text-blue-400">Command Center</h1>
-        <span id="uni-phase" class="text-sm bg-gray-800 px-3 py-1 rounded-full border border-gray-600">Lade Daten...</span>
-    </header>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold" id="athlete-name">Lade...</h1>
+        <p class="text-xs text-gray-400 mt-1" id="event-focus">--</p>
+    </div>
 
-    <!-- Desktop Ansicht (Versteckt auf Mobile) -->
-    <div class="hidden md:grid grid-cols-3 gap-6 mb-8" id="desktop-view">
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
-            <h2 class="text-lg text-gray-400 mb-2">Biometrie & Makros</h2>
-            <p class="text-3xl font-bold" id="weight-data">-- kg <span class="text-sm text-gray-400">/ -- kg Ziel</span></p>
-            <p class="text-sm text-blue-300 mt-2">Protein: <span id="protein-data">--</span>g | Defizit: <span id="kcal-data">--</span> kcal</p>
-            <p class="text-sm text-red-400 mt-1">Sehnen-Steifigkeit: <span id="tendon-data">--</span>/10</p>
+    <!-- Readiness & Garmin Load Card -->
+    <div class="card p-5 mb-6 bg-gradient-to-br from-[#1c212b] to-[#131720]">
+        <div class="flex items-center gap-4 mb-5">
+            <div class="w-16 h-16 rounded-full border-4 border-[#1fd6a3] flex items-center justify-center border-r-gray-700">
+                <span class="text-2xl font-bold" id="score-val">--</span>
+            </div>
+            <div>
+                <p class="text-[10px] text-gray-400 tracking-wider font-bold mb-1">COACH SCORE</p>
+                <p class="font-bold text-teal text-sm" id="score-label">--</p>
+            </div>
         </div>
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg col-span-2">
-            <h2 class="text-lg text-gray-400 mb-2">Aktueller Fokus</h2>
-            <p class="text-xl text-white font-semibold" id="training-phase">--</p>
-            <p class="text-sm text-gray-400 mt-2">Die vollständige Desktop-Historie (Graphen) fügen wir im nächsten Schritt hinzu.</p>
+        
+        <!-- CTL / ATL / TSB (Garmin Metrics) -->
+        <div class="grid grid-cols-3 gap-2 border-t border-gray-800 pt-4">
+            <div>
+                <p class="text-[10px] text-gray-500 font-bold">FITNESS (CTL)</p>
+                <p class="text-xl font-bold" id="metric-ctl">--</p>
+            </div>
+            <div>
+                <p class="text-[10px] text-gray-500 font-bold">FATIGUE (ATL)</p>
+                <p class="text-xl font-bold" id="metric-atl">--</p>
+            </div>
+            <div>
+                <p class="text-[10px] text-gray-500 font-bold">FORM (TSB)</p>
+                <p class="text-xl font-bold text-teal" id="metric-tsb">--</p>
+            </div>
         </div>
     </div>
 
-    <!-- Mobile Gym-Ansicht -->
-    <div class="bg-gray-800 p-6 rounded-xl border border-blue-900 shadow-lg">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold text-white">Heutiges Training</h2>
-            <span id="workout-type" class="bg-blue-600 text-xs px-2 py-1 rounded">--</span>
+    <!-- Horizontaler Kalender -->
+    <div class="flex justify-between gap-1 mb-6" id="calendar-row">
+        <!-- Generiert via JS -->
+    </div>
+
+    <!-- Tagesplan -->
+    <div class="mb-2 flex justify-between items-end">
+        <h2 class="text-lg font-bold">Heutiger Plan</h2>
+        <span class="text-xs text-gray-400" id="current-date">--</span>
+    </div>
+
+    <!-- Morning Session (Gym) -->
+    <div class="card p-4 mb-3 border-l-4 border-l-gray-500" id="session-morning">
+        <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-sm" id="am-type">--</h3>
+            <span class="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded" id="am-duration">--</span>
+        </div>
+        <p class="text-white font-bold mb-1" id="am-title">--</p>
+        <p class="text-xs text-gray-400" id="am-details">--</p>
+    </div>
+
+    <!-- Evening Session (Endurance) -->
+    <div class="card p-4 mb-6 border-l-4 border-l-[#1fd6a3]" id="session-evening">
+        <div class="flex justify-between items-start mb-2">
+            <h3 class="font-bold text-sm" id="pm-type">--</h3>
+            <span class="text-xs text-gray-900 bg-teal px-2 py-1 rounded font-bold" id="pm-duration">--</span>
+        </div>
+        <p class="text-white font-bold mb-2" id="pm-title">--</p>
+        
+        <div class="flex gap-4 mb-3">
+            <div class="bg-gray-800 rounded px-2 py-1">
+                <span class="text-[10px] text-gray-400 block">TSS</span>
+                <span class="text-sm font-bold" id="pm-tss">--</span>
+            </div>
+            <div class="bg-gray-800 rounded px-2 py-1">
+                <span class="text-[10px] text-gray-400 block">Zielt-Zone</span>
+                <span class="text-sm font-bold" id="pm-zone">--</span>
+            </div>
         </div>
         
-        <div class="bg-red-900/30 border border-red-800 p-3 rounded-lg mb-6">
-            <h3 class="text-sm font-bold text-red-400 mb-2">⚠️ PFLICHT PREHAB (UCS/APT)</h3>
-            <ul id="prehab-list" class="list-disc list-inside text-sm text-gray-300"></ul>
-        </div>
+        <p class="text-xs text-gray-400" id="pm-details">--</p>
+    </div>
 
-        <h3 class="text-sm font-bold text-gray-400 mb-3">ARBEITSSÄTZE (2-Satz MEV)</h3>
-        <div id="exercise-list" class="space-y-3"></div>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav fixed bottom-0 left-0 w-full h-20 px-6 flex justify-between items-center z-50">
+        <div class="flex flex-col items-center text-teal"><span class="text-xl">📅</span><span class="text-[10px] mt-1">Plan</span></div>
+        <div class="flex flex-col items-center text-gray-500"><span class="text-xl">📈</span><span class="text-[10px] mt-1">Data</span></div>
+        <div class="nav-center-btn"><span class="text-2xl">🤖</span></div>
+        <div class="flex flex-col items-center text-gray-500"><span class="text-xl">🍎</span><span class="text-[10px] mt-1">Makros</span></div>
+        <div class="flex flex-col items-center text-gray-500"><span class="text-xl">⚙️</span><span class="text-[10px] mt-1">Settings</span></div>
     </div>
 
     <script>
-        // Lade die Daten aus der JSON Datei
         fetch('dashboard_data.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                // Fülle Header & Desktop Stats
-                document.getElementById('uni-phase').innerText = data.week_focus.uni_phase;
-                document.getElementById('training-phase').innerText = data.week_focus.training_phase;
-                document.getElementById('weight-data').innerHTML = `${data.athlete.weight_current} kg <span class="text-sm text-gray-400">/ ${data.athlete.weight_target} kg Ziel</span>`;
-                document.getElementById('protein-data').innerText = data.athlete.macros_target.protein;
-                document.getElementById('kcal-data').innerText = data.athlete.macros_target.calories_deficit;
-                document.getElementById('tendon-data').innerText = data.athlete.tendon_stiffness_level;
+                // Header & Metrics
+                document.getElementById('athlete-name').innerText = `Hi, ${data.athlete.name}`;
+                document.getElementById('event-focus').innerText = data.athlete.event_focus;
+                document.getElementById('score-val').innerText = data.athlete.readiness_score;
+                document.getElementById('score-label').innerText = data.athlete.readiness_label;
+                document.getElementById('metric-ctl').innerText = data.athlete.metrics.fitness_ctl;
+                document.getElementById('metric-atl').innerText = data.athlete.metrics.fatigue_atl;
+                document.getElementById('metric-tsb').innerText = "+" + data.athlete.metrics.form_tsb;
 
-                // Fülle Mobile Gym View
-                document.getElementById('workout-type').innerText = data.mobile_daily_plan.type;
-                
-                const prehabList = document.getElementById('prehab-list');
-                data.mobile_daily_plan.prehab_mandatory.forEach(item => {
-                    prehabList.innerHTML += `<li>${item}</li>`;
-                });
-
-                const exerciseList = document.getElementById('exercise-list');
-                data.mobile_daily_plan.exercises.forEach(ex => {
-                    exerciseList.innerHTML += `
-                        <div class="flex justify-between items-center bg-gray-700 p-3 rounded-lg">
-                            <div>
-                                <p class="font-bold">${ex.name}</p>
-                                <p class="text-xs text-gray-400">${ex.sets} Sätze x ${ex.reps}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-blue-400 font-bold">${ex.target_weight} kg</p>
-                            </div>
+                // Calendar
+                const calRow = document.getElementById('calendar-row');
+                data.wochen_kalender.forEach(tag => {
+                    const isActive = tag.status === 'active';
+                    const bgClass = isActive ? 'bg-teal text-gray-900' : 'bg-[#1c212b]';
+                    calRow.innerHTML += `
+                        <div class="flex-1 flex flex-col items-center py-2 rounded-lg ${bgClass} border border-[#2d3342]">
+                            <span class="text-[10px] ${isActive ? 'text-gray-800' : 'text-gray-400'} font-bold">${tag.tag}</span>
+                            <span class="text-sm font-bold">${tag.datum}</span>
                         </div>`;
                 });
+
+                // Sessions
+                document.getElementById('current-date').innerText = data.tagesplan.datum;
+                
+                // Morning
+                document.getElementById('am-type').innerText = data.tagesplan.morning.type;
+                document.getElementById('am-duration').innerText = data.tagesplan.morning.duration;
+                document.getElementById('am-title').innerText = data.tagesplan.morning.title;
+                document.getElementById('am-details').innerText = data.tagesplan.morning.details;
+
+                // Evening
+                document.getElementById('pm-type').innerText = data.tagesplan.evening.type;
+                document.getElementById('pm-duration').innerText = data.tagesplan.evening.duration;
+                document.getElementById('pm-title').innerText = data.tagesplan.evening.title;
+                document.getElementById('pm-tss').innerText = data.tagesplan.evening.tss;
+                document.getElementById('pm-zone').innerText = data.tagesplan.evening.zone;
+                document.getElementById('pm-details').innerText = data.tagesplan.evening.details;
             });
     </script>
 </body>
